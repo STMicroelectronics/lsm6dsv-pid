@@ -30,13 +30,26 @@ This directory contains the LSM6DSV component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section1" aria-hidden="true">
 <label for="collapse-section1" aria-hidden="true">V1.0.0 / 05-Dic-2022</label>
 <div>
 
 ## Main changes
 
 - First official release [ref. DS v2.0]
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
+<label for="collapse-section1" aria-hidden="true">V1.0.1 / 19-Apr-2023</label>
+<div>
+
+## Main changes
+
+- Fix enum values names
+- Add __weak directive to read/write registers routines
 
 ##
 
