@@ -109,6 +109,11 @@ static void bytecpy(uint8_t *target, uint8_t *source)
   * @{
   *
   */
+float_t lsm6dsv_from_sflp_to_mg(int16_t lsb)
+{
+  return ((float_t)lsb) * 0.061f;
+}
+
 float_t lsm6dsv_from_fs2_to_mg(int16_t lsb)
 {
   return ((float_t)lsb) * 0.061f;
@@ -534,13 +539,23 @@ int32_t lsm6dsv_xl_data_rate_set(stmdev_ctx_t *ctx,
                                  lsm6dsv_data_rate_t val)
 {
   lsm6dsv_ctrl1_t ctrl1;
+  lsm6dsv_haodr_cfg_t haodr;
+  uint8_t sel;
   int32_t ret;
 
   ret = lsm6dsv_read_reg(ctx, LSM6DSV_CTRL1, (uint8_t *)&ctrl1, 1);
-  if (ret == 0)
-  {
+  if (ret != 0) { return ret; }
+
     ctrl1.odr_xl = (uint8_t)val & 0x0Fu;
     ret = lsm6dsv_write_reg(ctx, LSM6DSV_CTRL1, (uint8_t *)&ctrl1, 1);
+  if (ret != 0) { return ret; }
+
+  sel = ((uint8_t)val >> 4) & 0xFU;
+  if (sel != 0U)
+  {
+    ret += lsm6dsv_read_reg(ctx, LSM6DSV_HAODR_CFG, (uint8_t *)&haodr, 1);
+    haodr.haodr_sel = sel;
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_HAODR_CFG, (uint8_t *)&haodr, 1);
   }
 
   return ret;
@@ -558,9 +573,15 @@ int32_t lsm6dsv_xl_data_rate_get(stmdev_ctx_t *ctx,
                                  lsm6dsv_data_rate_t *val)
 {
   lsm6dsv_ctrl1_t ctrl1;
+  lsm6dsv_haodr_cfg_t haodr;
+  uint8_t sel;
   int32_t ret;
 
   ret = lsm6dsv_read_reg(ctx, LSM6DSV_CTRL1, (uint8_t *)&ctrl1, 1);
+  ret += lsm6dsv_read_reg(ctx, LSM6DSV_HAODR_CFG, (uint8_t *)&haodr, 1);
+  if (ret != 0) { return ret; }
+
+  sel = haodr.haodr_sel;
 
   switch (ctrl1.odr_xl)
   {
@@ -577,49 +598,160 @@ int32_t lsm6dsv_xl_data_rate_get(stmdev_ctx_t *ctx,
       break;
 
     case LSM6DSV_ODR_AT_15Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_15Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_15Hz625;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_12Hz5;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_30Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_30Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_31Hz25;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_25Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_60Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_60Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_62Hz5;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_50Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_120Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_120Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_125Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_100Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_240Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_240Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_250Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_200Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_480Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_480Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_500Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_400Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_960Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_960Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_1000Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_800Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_1920Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_1920Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_2000Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_1600Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_3840Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_3840Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_4000Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_3200Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_7680Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_7680Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_8000Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_6400Hz;
+        break;
+      }
       break;
 
     default:
       *val = LSM6DSV_ODR_OFF;
       break;
   }
+
   return ret;
 }
 
@@ -627,7 +759,7 @@ int32_t lsm6dsv_xl_data_rate_get(stmdev_ctx_t *ctx,
   * @brief  Accelerometer operating mode selection.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      XL_HIGH_PERFORMANCE_MD, XL_LOW_POWER_2_AVG_MD, XL_LOW_POWER_4_AVG_MD, XL_LOW_POWER_8_AVG_MD, XL_NORMAL_MD,
+  * @param  val      XL_HIGH_PERFORMANCE_MD, XL_HIGH_ACCURACY_ODR_MD, XL_LOW_POWER_2_AVG_MD, XL_LOW_POWER_4_AVG_MD, XL_LOW_POWER_8_AVG_MD, XL_NORMAL_MD,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -651,7 +783,7 @@ int32_t lsm6dsv_xl_mode_set(stmdev_ctx_t *ctx, lsm6dsv_xl_mode_t val)
   * @brief  Accelerometer operating mode selection.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      XL_HIGH_PERFORMANCE_MD, XL_LOW_POWER_2_AVG_MD, XL_LOW_POWER_4_AVG_MD, XL_LOW_POWER_8_AVG_MD, XL_NORMAL_MD,
+  * @param  val      XL_HIGH_PERFORMANCE_MD, XL_HIGH_ACCURACY_ODR_MD, XL_LOW_POWER_2_AVG_MD, XL_LOW_POWER_4_AVG_MD, XL_LOW_POWER_8_AVG_MD, XL_NORMAL_MD,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -661,11 +793,20 @@ int32_t lsm6dsv_xl_mode_get(stmdev_ctx_t *ctx, lsm6dsv_xl_mode_t *val)
   int32_t ret;
 
   ret = lsm6dsv_read_reg(ctx, LSM6DSV_CTRL1, (uint8_t *)&ctrl1, 1);
+  if (ret != 0) { return ret; }
 
   switch (ctrl1.op_mode_xl)
   {
     case LSM6DSV_XL_HIGH_PERFORMANCE_MD:
       *val = LSM6DSV_XL_HIGH_PERFORMANCE_MD;
+      break;
+
+    case LSM6DSV_XL_HIGH_ACCURACY_ODR_MD:
+      *val = LSM6DSV_XL_HIGH_ACCURACY_ODR_MD;
+      break;
+
+    case LSM6DSV_XL_ODR_TRIGGERED_MD:
+      *val = LSM6DSV_XL_ODR_TRIGGERED_MD;
       break;
 
     case LSM6DSV_XL_LOW_POWER_2_AVG_MD:
@@ -688,6 +829,7 @@ int32_t lsm6dsv_xl_mode_get(stmdev_ctx_t *ctx, lsm6dsv_xl_mode_t *val)
       *val = LSM6DSV_XL_HIGH_PERFORMANCE_MD;
       break;
   }
+
   return ret;
 }
 
@@ -703,14 +845,21 @@ int32_t lsm6dsv_gy_data_rate_set(stmdev_ctx_t *ctx,
                                  lsm6dsv_data_rate_t val)
 {
   lsm6dsv_ctrl2_t ctrl2;
+  lsm6dsv_haodr_cfg_t haodr;
+  uint8_t sel;
   int32_t ret;
 
   ret = lsm6dsv_read_reg(ctx, LSM6DSV_CTRL2, (uint8_t *)&ctrl2, 1);
+  ctrl2.odr_g = (uint8_t)val & 0x0Fu;
+  ret += lsm6dsv_write_reg(ctx, LSM6DSV_CTRL2, (uint8_t *)&ctrl2, 1);
+  if (ret != 0) { return ret; }
 
-  if (ret == 0)
+  sel = ((uint8_t)val >> 4) & 0xFU;
+  if (sel != 0U)
   {
-    ctrl2.odr_g = (uint8_t)val & 0x0Fu;
-    ret = lsm6dsv_write_reg(ctx, LSM6DSV_CTRL2, (uint8_t *)&ctrl2, 1);
+    ret += lsm6dsv_read_reg(ctx, LSM6DSV_HAODR_CFG, (uint8_t *)&haodr, 1);
+    haodr.haodr_sel = sel;
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_HAODR_CFG, (uint8_t *)&haodr, 1);
   }
 
   return ret;
@@ -728,9 +877,15 @@ int32_t lsm6dsv_gy_data_rate_get(stmdev_ctx_t *ctx,
                                  lsm6dsv_data_rate_t *val)
 {
   lsm6dsv_ctrl2_t ctrl2;
+  lsm6dsv_haodr_cfg_t haodr;
+  uint8_t sel;
   int32_t ret;
 
   ret = lsm6dsv_read_reg(ctx, LSM6DSV_CTRL2, (uint8_t *)&ctrl2, 1);
+  ret += lsm6dsv_read_reg(ctx, LSM6DSV_HAODR_CFG, (uint8_t *)&haodr, 1);
+  if (ret != 0) { return ret; }
+
+  sel = haodr.haodr_sel;
 
   switch (ctrl2.odr_g)
   {
@@ -747,49 +902,160 @@ int32_t lsm6dsv_gy_data_rate_get(stmdev_ctx_t *ctx,
       break;
 
     case LSM6DSV_ODR_AT_15Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_15Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_15Hz625;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_12Hz5;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_30Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_30Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_31Hz25;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_25Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_60Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_60Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_62Hz5;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_50Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_120Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_120Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_125Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_100Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_240Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_240Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_250Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_200Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_480Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_480Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_500Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_400Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_960Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_960Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_1000Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_800Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_1920Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_1920Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_2000Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_1600Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_3840Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_3840Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_4000Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_3200Hz;
+        break;
+      }
       break;
 
     case LSM6DSV_ODR_AT_7680Hz:
+      switch (sel) {
+      default:
+      case 0:
       *val = LSM6DSV_ODR_AT_7680Hz;
+      break;
+      case 1:
+        *val = LSM6DSV_ODR_HA01_AT_8000Hz;
+        break;
+      case 2:
+        *val = LSM6DSV_ODR_HA02_AT_6400Hz;
+        break;
+      }
       break;
 
     default:
       *val = LSM6DSV_ODR_OFF;
       break;
   }
+
   return ret;
 }
 
@@ -797,7 +1063,7 @@ int32_t lsm6dsv_gy_data_rate_get(stmdev_ctx_t *ctx,
   * @brief  Gyroscope operating mode selection.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      GY_HIGH_PERFORMANCE_MD, GY_SLEEP_MD, GY_LOW_POWER_MD,
+  * @param  val      GY_HIGH_PERFORMANCE_MD, GY_HIGH_ACCURACY_ODR_MD, GY_SLEEP_MD, GY_LOW_POWER_MD,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -820,7 +1086,7 @@ int32_t lsm6dsv_gy_mode_set(stmdev_ctx_t *ctx, lsm6dsv_gy_mode_t val)
   * @brief  Gyroscope operating mode selection.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      GY_HIGH_PERFORMANCE_MD, GY_SLEEP_MD, GY_LOW_POWER_MD,
+  * @param  val      GY_HIGH_PERFORMANCE_MD, GY_HIGH_ACCURACY_ODR_MD, GY_SLEEP_MD, GY_LOW_POWER_MD,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -830,6 +1096,8 @@ int32_t lsm6dsv_gy_mode_get(stmdev_ctx_t *ctx, lsm6dsv_gy_mode_t *val)
   int32_t ret;
 
   ret = lsm6dsv_read_reg(ctx, LSM6DSV_CTRL2, (uint8_t *)&ctrl2, 1);
+  if (ret != 0) { return ret; }
+
   switch (ctrl2.op_mode_g)
   {
     case LSM6DSV_GY_HIGH_PERFORMANCE_MD:
@@ -852,6 +1120,7 @@ int32_t lsm6dsv_gy_mode_get(stmdev_ctx_t *ctx, lsm6dsv_gy_mode_t *val)
       *val = LSM6DSV_GY_HIGH_PERFORMANCE_MD;
       break;
   }
+
   return ret;
 }
 
@@ -937,6 +1206,53 @@ int32_t lsm6dsv_block_data_update_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   ret = lsm6dsv_read_reg(ctx, LSM6DSV_CTRL3, (uint8_t *)&ctrl3, 1);
   *val = ctrl3.bdu;
+
+  return ret;
+}
+
+/**
+  * @brief  Configure ODR trigger. [set]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      number of data in the reference period.
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_odr_trig_cfg_set(stmdev_ctx_t *ctx, uint8_t val)
+{
+  lsm6dsv_odr_trig_cfg_t odr_trig;
+  int32_t ret;
+
+  if (val >= 1U && val <= 3U) {
+    return -1;
+  }
+
+  ret = lsm6dsv_read_reg(ctx, LSM6DSV_ODR_TRIG_CFG, (uint8_t *)&odr_trig, 1);
+
+  if (ret == 0)
+  {
+    odr_trig.odr_trig_nodr = val;
+    ret = lsm6dsv_write_reg(ctx, LSM6DSV_ODR_TRIG_CFG, (uint8_t *)&odr_trig, 1);
+  }
+
+  return ret;
+}
+
+/**
+  * @brief  Configure ODR trigger. [get]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      number of data in the reference period.
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_odr_trig_cfg_get(stmdev_ctx_t *ctx, uint8_t *val)
+{
+  lsm6dsv_odr_trig_cfg_t odr_trig;
+  int32_t ret;
+
+  ret = lsm6dsv_read_reg(ctx, LSM6DSV_ODR_TRIG_CFG, (uint8_t *)&odr_trig, 1);
+  *val = odr_trig.odr_trig_nodr;
 
   return ret;
 }
@@ -3119,7 +3435,7 @@ int32_t lsm6dsv_fifo_gy_batch_get(stmdev_ctx_t *ctx,
   * @brief  FIFO mode selection.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      BYPASS_MODE, FIFO_MODE, STREAM_TO_FIFO_MODE, BYPASS_TO_STREAM_MODE, STREAM_MODE, BYPASS_TO_FIFO_MODE,
+  * @param  val      BYPASS_MODE, FIFO_MODE, STREAM_WTM_TO_FULL_MODE, STREAM_TO_FIFO_MODE, BYPASS_TO_STREAM_MODE, STREAM_MODE, BYPASS_TO_FIFO_MODE,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -3142,7 +3458,7 @@ int32_t lsm6dsv_fifo_mode_set(stmdev_ctx_t *ctx, lsm6dsv_fifo_mode_t val)
   * @brief  FIFO mode selection.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      BYPASS_MODE, FIFO_MODE, STREAM_TO_FIFO_MODE, BYPASS_TO_STREAM_MODE, STREAM_MODE, BYPASS_TO_FIFO_MODE,
+  * @param  val      BYPASS_MODE, FIFO_MODE, STREAM_WTM_TO_FULL_MODE, STREAM_TO_FIFO_MODE, BYPASS_TO_STREAM_MODE, STREAM_MODE, BYPASS_TO_FIFO_MODE,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -3486,7 +3802,14 @@ int32_t lsm6dsv_fifo_status_get(stmdev_ctx_t *ctx,
   * @brief  FIFO data output[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      FIFO_EMPTY, GY_NC_TAG, XL_NC_TAG, TIMESTAMP_TAG, TEMPERATURE_TAG, CFG_CHANGE_TAG, XL_NC_T_2_TAG, XL_NC_T_1_TAG, XL_2XC_TAG, XL_3XC_TAG, GY_NC_T_2_TAG, GY_NC_T_1_TAG, GY_2XC_TAG, GY_3XC_TAG, SENSORHUB_SLAVE0_TAG, SENSORHUB_SLAVE1_TAG, SENSORHUB_SLAVE2_TAG, SENSORHUB_SLAVE3_TAG, STEP_CPUNTER_TAG, SENSORHUB_NACK_TAG, MLC_RESULT_TAG, MLC_FILTER, MLC_FEATURE, XL_DUAL_CORE, AH,
+  * @param  val      FIFO_EMPTY, GY_NC_TAG, XL_NC_TAG, TIMESTAMP_TAG,
+                     TEMPERATURE_TAG, CFG_CHANGE_TAG, XL_NC_T_2_TAG,
+                     XL_NC_T_1_TAG, XL_2XC_TAG, XL_3XC_TAG, GY_NC_T_2_TAG,
+                     GY_NC_T_1_TAG, GY_2XC_TAG, GY_3XC_TAG, SENSORHUB_SLAVE0_TAG,
+                     SENSORHUB_SLAVE1_TAG, SENSORHUB_SLAVE2_TAG, SENSORHUB_SLAVE3_TAG,
+                     STEP_COUNTER_TAG, SFLP_GAME_ROTATION_VECTOR_TAG, SFLP_GYROSCOPE_BIAS_TAG,
+                     SFLP_GRAVITY_VECTOR_TAG, SENSORHUB_NACK_TAG, XL_DUAL_CORE,
+                     GY_ENHANCED_EIS,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -3498,6 +3821,8 @@ int32_t lsm6dsv_fifo_out_raw_get(stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = lsm6dsv_read_reg(ctx, LSM6DSV_FIFO_DATA_OUT_TAG, buff, 7);
+  if (ret != 0) { return ret; }
+
   bytecpy((uint8_t *)&fifo_data_out_tag, &buff[0]);
 
   switch (fifo_data_out_tag.tag_sensor)
@@ -3576,6 +3901,18 @@ int32_t lsm6dsv_fifo_out_raw_get(stmdev_ctx_t *ctx,
 
     case LSM6DSV_STEP_COUNTER_TAG:
       val->tag = LSM6DSV_STEP_COUNTER_TAG;
+      break;
+
+    case LSM6DSV_SFLP_GAME_ROTATION_VECTOR_TAG:
+      val->tag = LSM6DSV_SFLP_GAME_ROTATION_VECTOR_TAG;
+      break;
+
+    case LSM6DSV_SFLP_GYROSCOPE_BIAS_TAG:
+      val->tag = LSM6DSV_SFLP_GYROSCOPE_BIAS_TAG;
+      break;
+
+    case LSM6DSV_SFLP_GRAVITY_VECTOR_TAG:
+      val->tag = LSM6DSV_SFLP_GRAVITY_VECTOR_TAG;
       break;
 
     case LSM6DSV_SENSORHUB_NACK_TAG:
@@ -3876,6 +4213,65 @@ int32_t lsm6dsv_fifo_batch_sh_slave_3_get(stmdev_ctx_t *ctx, uint8_t *val)
   }
 
   *val = slv3_config.batch_ext_sens_3_en;
+
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  return ret;
+}
+
+/**
+  * @brief  Batching in FIFO buffer of SFLP.[set]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      Batching in FIFO buffer of SFLP values.
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_fifo_sflp_batch_set(stmdev_ctx_t *ctx,
+                                       lsm6dsv_fifo_sflp_raw_t val)
+{
+  lsm6dsv_emb_func_fifo_en_a_t emb_func_fifo_en_a;
+  int32_t ret;
+
+  ret = lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  if (ret == 0)
+  {
+    ret = lsm6dsv_read_reg(ctx, LSM6DSV_EMB_FUNC_FIFO_EN_A, (uint8_t *)&emb_func_fifo_en_a, 1);
+    emb_func_fifo_en_a.sflp_game_fifo_en = val.game_rotation;
+    emb_func_fifo_en_a.sflp_gravity_fifo_en = val.gravity;
+    emb_func_fifo_en_a.sflp_gbias_fifo_en = val.gbias;
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_EMB_FUNC_FIFO_EN_A,
+                                (uint8_t *)&emb_func_fifo_en_a, 1);
+  }
+
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  return ret;
+}
+
+/**
+  * @brief  Batching in FIFO buffer of SFLP.[get]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      Batching in FIFO buffer of SFLP values.
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_fifo_sflp_batch_get(stmdev_ctx_t *ctx,
+                                       lsm6dsv_fifo_sflp_raw_t *val)
+{
+  lsm6dsv_emb_func_fifo_en_a_t emb_func_fifo_en_a;
+  int32_t ret;
+
+  ret = lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  if (ret == 0)
+  {
+    ret = lsm6dsv_read_reg(ctx, LSM6DSV_EMB_FUNC_FIFO_EN_A, (uint8_t *)&emb_func_fifo_en_a, 1);
+
+    val->game_rotation = emb_func_fifo_en_a.sflp_game_fifo_en;
+    val->gravity = emb_func_fifo_en_a.sflp_gravity_fifo_en;
+    val->gbias = emb_func_fifo_en_a.sflp_gbias_fifo_en;
+  }
 
   ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
 
@@ -5184,6 +5580,325 @@ int32_t lsm6dsv_fsm_data_rate_get(stmdev_ctx_t *ctx,
       *val = LSM6DSV_FSM_15Hz;
       break;
   }
+
+  return ret;
+}
+
+/*
+ * Original conversion routines taken from: https://github.com/numpy/numpy
+ *
+ * uint16_t npy_floatbits_to_halfbits(uint32_t f);
+ * uint16_t npy_float_to_half(float_t f);
+ *
+ * Released under BSD-3-Clause License
+ */
+static uint16_t npy_floatbits_to_halfbits(uint32_t f)
+{
+  uint32_t f_exp, f_sig;
+  uint16_t h_sgn, h_exp, h_sig;
+
+  h_sgn = (uint16_t)((f & 0x80000000u) >> 16);
+  f_exp = (f & 0x7f800000u);
+
+  /* Exponent overflow/NaN converts to signed inf/NaN */
+  if (f_exp >= 0x47800000u)
+  {
+    if (f_exp == 0x7f800000u)
+    {
+      /* Inf or NaN */
+      f_sig = (f & 0x007fffffu);
+      if (f_sig != 0U)
+      {
+        /* NaN - propagate the flag in the significand... */
+        uint16_t ret = (uint16_t)(0x7c00u + (f_sig >> 13));
+        /* ...but make sure it stays a NaN */
+        if (ret == 0x7c00u)
+        {
+          ret++;
+        }
+        return h_sgn + ret;
+      }
+      else
+      {
+        /* signed inf */
+        return (uint16_t)(h_sgn + 0x7c00u);
+      }
+    }
+    else
+    {
+      /* overflow to signed inf */
+#if NPY_HALF_GENERATE_OVERFLOW
+      npy_set_floatstatus_overflow();
+#endif
+      return (uint16_t)(h_sgn + 0x7c00u);
+    }
+  }
+
+  /* Exponent underflow converts to a subnormal half or signed zero */
+  if (f_exp <= 0x38000000u)
+  {
+    /*
+     * Signed zeros, subnormal floats, and floats with small
+     * exponents all convert to signed zero half-floats.
+     */
+    if (f_exp < 0x33000000u)
+    {
+#if NPY_HALF_GENERATE_UNDERFLOW
+      /* If f != 0, it underflowed to 0 */
+      if ((f & 0x7fffffff) != 0)
+      {
+        npy_set_floatstatus_underflow();
+      }
+#endif
+      return h_sgn;
+    }
+    /* Make the subnormal significand */
+    f_exp >>= 23;
+    f_sig = (0x00800000u + (f & 0x007fffffu));
+#if NPY_HALF_GENERATE_UNDERFLOW
+    /* If it's not exactly represented, it underflowed */
+    if ((f_sig & (((uint32_t)1 << (126 - f_exp)) - 1)) != 0)
+    {
+      npy_set_floatstatus_underflow();
+    }
+#endif
+    /*
+     * Usually the significand is shifted by 13. For subnormals an
+     * additional shift needs to occur. This shift is one for the largest
+     * exponent giving a subnormal `f_exp = 0x38000000 >> 23 = 112`, which
+     * offsets the new first bit. At most the shift can be 1+10 bits.
+     */
+    f_sig >>= (113U - f_exp);
+    /* Handle rounding by adding 1 to the bit beyond half precision */
+#if NPY_HALF_ROUND_TIES_TO_EVEN
+    /*
+     * If the last bit in the half significand is 0 (already even), and
+     * the remaining bit pattern is 1000...0, then we do not add one
+     * to the bit after the half significand. However, the (113 - f_exp)
+     * shift can lose up to 11 bits, so the || checks them in the original.
+     * In all other cases, we can just add one.
+     */
+    if (((f_sig & 0x00003fffu) != 0x00001000u) || (f & 0x000007ffu))
+    {
+      f_sig += 0x00001000u;
+    }
+#else
+    f_sig += 0x00001000u;
+#endif
+    h_sig = (uint16_t)(f_sig >> 13);
+    /*
+     * If the rounding causes a bit to spill into h_exp, it will
+     * increment h_exp from zero to one and h_sig will be zero.
+     * This is the correct result.
+     */
+    return (uint16_t)(h_sgn + h_sig);
+  }
+
+  /* Regular case with no overflow or underflow */
+  h_exp = (uint16_t)((f_exp - 0x38000000u) >> 13);
+  /* Handle rounding by adding 1 to the bit beyond half precision */
+  f_sig = (f & 0x007fffffu);
+#if NPY_HALF_ROUND_TIES_TO_EVEN
+  /*
+   * If the last bit in the half significand is 0 (already even), and
+   * the remaining bit pattern is 1000...0, then we do not add one
+   * to the bit after the half significand.  In all other cases, we do.
+   */
+  if ((f_sig & 0x00003fffu) != 0x00001000u)
+  {
+    f_sig += 0x00001000u;
+  }
+#else
+  f_sig += 0x00001000u;
+#endif
+  h_sig = (uint16_t)(f_sig >> 13);
+  /*
+   * If the rounding causes a bit to spill into h_exp, it will
+   * increment h_exp by one and h_sig will be zero.  This is the
+   * correct result.  h_exp may increment to 15, at greatest, in
+   * which case the result overflows to a signed inf.
+   */
+#if NPY_HALF_GENERATE_OVERFLOW
+  h_sig += h_exp;
+  if (h_sig == 0x7c00u)
+  {
+    npy_set_floatstatus_overflow();
+  }
+  return h_sgn + h_sig;
+#else
+  return h_sgn + h_exp + h_sig;
+#endif
+}
+
+static uint16_t npy_float_to_half(float_t f)
+{
+  union
+  {
+    float_t f;
+    uint32_t fbits;
+  } conv;
+  conv.f = f;
+  return npy_floatbits_to_halfbits(conv.fbits);
+}
+
+/**
+  * @brief  SFLP GBIAS value. The register value is expressed as half-precision
+  *         floating-point format: SEEEEEFFFFFFFFFF (S: 1 sign bit; E: 5 exponent
+  *          bits; F: 10 fraction bits).[set]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      GBIAS x/y/z val.
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_sflp_game_gbias_set(stmdev_ctx_t *ctx,
+                                       lsm6dsv_sflp_gbias_t *val)
+{
+  lsm6dsv_sflp_data_rate_t sflp_odr;
+  lsm6dsv_emb_func_exec_status_t emb_func_sts;
+  lsm6dsv_data_ready_t drdy;
+  lsm6dsv_xl_full_scale_t xl_fs;
+  lsm6dsv_ctrl10_t ctrl10;
+  uint8_t master_config;
+  uint8_t emb_func_en_saved[2];
+  uint8_t conf_saved[2];
+  uint8_t reg_zero[2] = {0x0, 0x0};
+  uint16_t gbias_hf[3];
+  float_t k = 0.005f;
+  int16_t xl_data[3];
+  int32_t data_tmp;
+  uint8_t *data_ptr = (uint8_t *)&data_tmp;
+  uint8_t i, j;
+  int32_t ret;
+
+  ret = lsm6dsv_sflp_data_rate_get(ctx, &sflp_odr);
+  if (ret != 0) { return ret; }
+
+  /* Calculate k factor */
+  switch (sflp_odr)
+  {
+    default:
+    case LSM6DSV_SFLP_15Hz:
+      k = 0.04f;
+      break;
+    case LSM6DSV_SFLP_30Hz:
+      k = 0.02f;
+      break;
+    case LSM6DSV_SFLP_60Hz:
+      k = 0.01f;
+      break;
+    case LSM6DSV_SFLP_120Hz:
+      k = 0.005f;
+      break;
+    case LSM6DSV_SFLP_240Hz:
+      k = 0.0025f;
+      break;
+    case LSM6DSV_SFLP_480Hz:
+      k = 0.00125f;
+      break;
+  }
+
+  /* compute gbias as half precision float in order to be put in embedded advanced feature register */
+  gbias_hf[0] = npy_float_to_half(val->gbias_x * (3.14159265358979323846f / 180.0f) / k);
+  gbias_hf[1] = npy_float_to_half(val->gbias_y * (3.14159265358979323846f / 180.0f) / k);
+  gbias_hf[2] = npy_float_to_half(val->gbias_z * (3.14159265358979323846f / 180.0f) / k);
+
+  /* Save sensor configuration and set high-performance mode (if the sensor is in power-down mode, turn it on) */
+  ret += lsm6dsv_read_reg(ctx, LSM6DSV_CTRL1, conf_saved, 2);
+  ret += lsm6dsv_xl_mode_set(ctx, LSM6DSV_XL_HIGH_PERFORMANCE_MD);
+  ret += lsm6dsv_gy_mode_set(ctx, LSM6DSV_GY_HIGH_PERFORMANCE_MD);
+  if (((uint8_t)conf_saved[0] & 0x0FU) == (uint8_t)LSM6DSV_ODR_OFF)
+  {
+    ret += lsm6dsv_xl_data_rate_set(ctx, LSM6DSV_ODR_AT_120Hz);
+  }
+
+  /* Make sure to turn the sensor-hub master off */
+  ret += lsm6dsv_sh_master_get(ctx, &master_config);
+  ret += lsm6dsv_sh_master_set(ctx, 0);
+
+  /* disable algos */
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  ret += lsm6dsv_read_reg(ctx, LSM6DSV_EMB_FUNC_EN_A, emb_func_en_saved, 2);
+  ret += lsm6dsv_write_reg(ctx, LSM6DSV_EMB_FUNC_EN_A, reg_zero, 2);
+  do
+  {
+    ret += lsm6dsv_read_reg(ctx, LSM6DSV_EMB_FUNC_EXEC_STATUS,
+                               (uint8_t *)&emb_func_sts, 1);
+  } while (emb_func_sts.emb_func_endop != 1U);
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  // enable gbias setting
+  ret += lsm6dsv_read_reg(ctx, LSM6DSV_CTRL10, (uint8_t *)&ctrl10, 1);
+  ctrl10.emb_func_debug = 1;
+  ret += lsm6dsv_write_reg(ctx, LSM6DSV_CTRL10, (uint8_t *)&ctrl10, 1);
+
+  /* enable algos */
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  emb_func_en_saved[0] |= 0x02U; /* force SFLP GAME en */
+  ret += lsm6dsv_write_reg(ctx, LSM6DSV_EMB_FUNC_EN_A, emb_func_en_saved,
+                              2);
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  ret += lsm6dsv_xl_full_scale_get(ctx, &xl_fs);
+
+  /* Read XL data */
+  do
+  {
+    ret += lsm6dsv_flag_data_ready_get(ctx, &drdy);
+  } while (drdy.drdy_xl != 1U);
+  ret += lsm6dsv_acceleration_raw_get(ctx, xl_data);
+
+  /* force sflp initialization */
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_SENSOR_HUB_MEM_BANK);
+  for (i = 0; i < 3U; i++)
+  {
+    j = 0;
+    data_tmp = (int32_t)xl_data[i];
+    data_tmp <<= xl_fs; // shift based on current fs
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_SENSOR_HUB_1 + 3U * i,
+                                &data_ptr[j++], 1);
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_SENSOR_HUB_2 + 3U * i,
+                                &data_ptr[j++], 1);
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_SENSOR_HUB_3 + 3U * i, &data_ptr[j],
+                                1);
+  }
+  for (i = 0; i < 3U; i++)
+  {
+    j = 0;
+    data_tmp = 0;
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_SENSOR_HUB_10 + 3U * i,
+                                &data_ptr[j++], 1);
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_SENSOR_HUB_11 + 3U * i,
+                                &data_ptr[j++], 1);
+    ret += lsm6dsv_write_reg(ctx, LSM6DSV_SENSOR_HUB_12 + 3U * i, &data_ptr[j],
+                                1);
+  }
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  // wait end_op (and at least 30 us)
+  ctx->mdelay(1);
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  do
+  {
+    ret += lsm6dsv_read_reg(ctx, LSM6DSV_EMB_FUNC_EXEC_STATUS,
+                               (uint8_t *)&emb_func_sts, 1);
+  } while (emb_func_sts.emb_func_endop != 1U);
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  /* write gbias in embedded advanced features registers */
+  ret += lsm6dsv_ln_pg_write(ctx, LSM6DSV_SFLP_GAME_GBIASX_L,
+                                (uint8_t *)gbias_hf, 6);
+
+  /* reload previous sensor configuration */
+  ret += lsm6dsv_write_reg(ctx, LSM6DSV_CTRL1, conf_saved, 2);
+
+  // disable gbias setting
+  ctrl10.emb_func_debug = 0;
+  ret += lsm6dsv_write_reg(ctx, LSM6DSV_CTRL10, (uint8_t *)&ctrl10, 1);
+
+  /* reload previous master configuration */
+  ret += lsm6dsv_sh_master_set(ctx, master_config);
+
   return ret;
 }
 
@@ -7934,6 +8649,153 @@ int32_t lsm6dsv_stpcnt_period_get(stmdev_ctx_t *ctx, uint16_t *val)
   ret = lsm6dsv_ln_pg_read(ctx, LSM6DSV_EMB_ADV_PG_1 + LSM6DSV_PEDO_SC_DELTAT_L, &buff[0], 2);
   *val = buff[1];
   *val = (*val * 256U) + buff[0];
+
+  return ret;
+}
+
+/**
+  * @}
+  *
+  */
+
+/**
+  * @defgroup  Sensor Fusion Low Power (SFLP)
+  * @brief     This section groups all the functions that manage pedometer.
+  * @{
+  *
+  */
+
+/**
+  * @brief  Enable SFLP Game Rotation Vector (6x).[set]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      Enable/Disable game rotation value (0/1).
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_sflp_game_rotation_set(stmdev_ctx_t *ctx, uint8_t val)
+{
+  lsm6dsv_emb_func_en_a_t emb_func_en_a;
+  int32_t ret;
+
+  ret = lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  if (ret != 0) { return ret; }
+
+  ret = lsm6dsv_read_reg(ctx, LSM6DSV_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
+  if (ret != 0) { goto exit; }
+
+  emb_func_en_a.sflp_game_en = val;
+  ret += lsm6dsv_write_reg(ctx, LSM6DSV_EMB_FUNC_EN_A,
+                              (uint8_t *)&emb_func_en_a, 1);
+
+exit:
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  return ret;
+}
+
+/**
+  * @brief  Enable SFLP Game Rotation Vector (6x).[get]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      Enable/Disable game rotation value (0/1).
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_sflp_game_rotation_get(stmdev_ctx_t *ctx, uint8_t *val)
+{
+  lsm6dsv_emb_func_en_a_t emb_func_en_a;
+  int32_t ret;
+
+  ret = lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  if (ret != 0) { return ret; }
+
+  ret = lsm6dsv_read_reg(ctx, LSM6DSV_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
+  *val = emb_func_en_a.sflp_game_en;
+
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  return ret;
+}
+
+/**
+  * @brief  SFLP Data Rate (ODR) configuration.[set]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      SFLP_15Hz, SFLP_30Hz, SFLP_60Hz, SFLP_120Hz, SFLP_240Hz, SFLP_480Hz
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_sflp_data_rate_set(stmdev_ctx_t *ctx,
+                                      lsm6dsv_sflp_data_rate_t val)
+{
+  lsm6dsv_sflp_odr_t sflp_odr;
+  int32_t ret;
+
+  ret = lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  if (ret != 0) { return ret; }
+
+  ret = lsm6dsv_read_reg(ctx, LSM6DSV_SFLP_ODR, (uint8_t *)&sflp_odr, 1);
+  if (ret != 0) { goto exit; }
+
+  sflp_odr.sflp_game_odr = (uint8_t)val & 0x07U;
+  ret += lsm6dsv_write_reg(ctx, LSM6DSV_SFLP_ODR, (uint8_t *)&sflp_odr, 1);
+
+exit:
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+
+  return ret;
+}
+
+/**
+  * @brief  SFLP Data Rate (ODR) configuration.[get]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      SFLP_15Hz, SFLP_30Hz, SFLP_60Hz, SFLP_120Hz, SFLP_240Hz, SFLP_480Hz
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv_sflp_data_rate_get(stmdev_ctx_t *ctx,
+                                      lsm6dsv_sflp_data_rate_t *val)
+{
+  lsm6dsv_sflp_odr_t sflp_odr;
+  int32_t ret;
+
+  ret = lsm6dsv_mem_bank_set(ctx, LSM6DSV_EMBED_FUNC_MEM_BANK);
+  ret += lsm6dsv_read_reg(ctx, LSM6DSV_SFLP_ODR, (uint8_t *)&sflp_odr, 1);
+  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+  if (ret != 0) { return ret; }
+
+  switch (sflp_odr.sflp_game_odr)
+  {
+    case LSM6DSV_SFLP_15Hz:
+      *val = LSM6DSV_SFLP_15Hz;
+      break;
+
+    case LSM6DSV_SFLP_30Hz:
+      *val = LSM6DSV_SFLP_30Hz;
+      break;
+
+    case LSM6DSV_SFLP_60Hz:
+      *val = LSM6DSV_SFLP_60Hz;
+      break;
+
+    case LSM6DSV_SFLP_120Hz:
+      *val = LSM6DSV_SFLP_120Hz;
+      break;
+
+    case LSM6DSV_SFLP_240Hz:
+      *val = LSM6DSV_SFLP_240Hz;
+      break;
+
+    case LSM6DSV_SFLP_480Hz:
+      *val = LSM6DSV_SFLP_480Hz;
+      break;
+
+    default:
+      *val = LSM6DSV_SFLP_15Hz;
+      break;
+  }
 
   return ret;
 }
