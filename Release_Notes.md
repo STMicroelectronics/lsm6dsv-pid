@@ -42,7 +42,7 @@ This directory contains the LSM6DSV component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section1" aria-hidden="true">
 <label for="collapse-section1" aria-hidden="true">V1.0.1 / 19-Apr-2023</label>
 <div>
 
@@ -50,6 +50,23 @@ This directory contains the LSM6DSV component drivers.
 
 - Fix enum values names
 - Add __weak directive to read/write registers routines
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
+<label for="collapse-section1" aria-hidden="true">V1.1.0 / 18-May-2023</label>
+<div>
+
+## Main changes
+
+- read sh status from mainpage
+- sensor_hub: change fifo_batch_sh_slave_xxx() API name
+- sensor_hub: add sh_status_get() API
+- sensor_hub: change sh_read_data_raw_get() API signature
+- lsm6dsv_reg.c: review read/write reg ret value checks
+- lsm6dsv_STdC: Align to DS V3.0
 
 ##
 
