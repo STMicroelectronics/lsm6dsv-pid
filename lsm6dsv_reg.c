@@ -4005,7 +4005,7 @@ int32_t lsm6dsv_fifo_stpcnt_batch_get(stmdev_ctx_t *ctx, uint8_t *val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv_fifo_batch_sh_slave_0_set(stmdev_ctx_t *ctx, uint8_t val)
+int32_t lsm6dsv_fifo_sh_batch_slave_0_set(stmdev_ctx_t *ctx, uint8_t val)
 {
   lsm6dsv_slv0_config_t slv0_config;
   int32_t ret;
@@ -4030,7 +4030,7 @@ int32_t lsm6dsv_fifo_batch_sh_slave_0_set(stmdev_ctx_t *ctx, uint8_t val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv_fifo_batch_sh_slave_0_get(stmdev_ctx_t *ctx, uint8_t *val)
+int32_t lsm6dsv_fifo_sh_batch_slave_0_get(stmdev_ctx_t *ctx, uint8_t *val)
 {
   lsm6dsv_slv0_config_t slv0_config;
   int32_t ret;
@@ -4054,7 +4054,7 @@ int32_t lsm6dsv_fifo_batch_sh_slave_0_get(stmdev_ctx_t *ctx, uint8_t *val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv_fifo_batch_sh_slave_1_set(stmdev_ctx_t *ctx, uint8_t val)
+int32_t lsm6dsv_fifo_sh_batch_slave_1_set(stmdev_ctx_t *ctx, uint8_t val)
 {
   lsm6dsv_slv1_config_t slv1_config;
   int32_t ret;
@@ -4079,7 +4079,7 @@ int32_t lsm6dsv_fifo_batch_sh_slave_1_set(stmdev_ctx_t *ctx, uint8_t val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv_fifo_batch_sh_slave_1_get(stmdev_ctx_t *ctx, uint8_t *val)
+int32_t lsm6dsv_fifo_sh_batch_slave_1_get(stmdev_ctx_t *ctx, uint8_t *val)
 {
   lsm6dsv_slv1_config_t slv1_config;
   int32_t ret;
@@ -4103,7 +4103,7 @@ int32_t lsm6dsv_fifo_batch_sh_slave_1_get(stmdev_ctx_t *ctx, uint8_t *val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv_fifo_batch_sh_slave_2_set(stmdev_ctx_t *ctx, uint8_t val)
+int32_t lsm6dsv_fifo_sh_batch_slave_2_set(stmdev_ctx_t *ctx, uint8_t val)
 {
   lsm6dsv_slv2_config_t slv2_config;
   int32_t ret;
@@ -4128,7 +4128,7 @@ int32_t lsm6dsv_fifo_batch_sh_slave_2_set(stmdev_ctx_t *ctx, uint8_t val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv_fifo_batch_sh_slave_2_get(stmdev_ctx_t *ctx, uint8_t *val)
+int32_t lsm6dsv_fifo_sh_batch_slave_2_get(stmdev_ctx_t *ctx, uint8_t *val)
 {
   lsm6dsv_slv2_config_t slv2_config;
   int32_t ret;
@@ -4152,7 +4152,7 @@ int32_t lsm6dsv_fifo_batch_sh_slave_2_get(stmdev_ctx_t *ctx, uint8_t *val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv_fifo_batch_sh_slave_3_set(stmdev_ctx_t *ctx, uint8_t val)
+int32_t lsm6dsv_fifo_sh_batch_slave_3_set(stmdev_ctx_t *ctx, uint8_t val)
 {
   lsm6dsv_slv3_config_t slv3_config;
   int32_t ret;
@@ -4177,7 +4177,7 @@ int32_t lsm6dsv_fifo_batch_sh_slave_3_set(stmdev_ctx_t *ctx, uint8_t val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv_fifo_batch_sh_slave_3_get(stmdev_ctx_t *ctx, uint8_t *val)
+int32_t lsm6dsv_fifo_sh_batch_slave_3_get(stmdev_ctx_t *ctx, uint8_t *val)
 {
   lsm6dsv_slv3_config_t slv3_config;
   int32_t ret;
