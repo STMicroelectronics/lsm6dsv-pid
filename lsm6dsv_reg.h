@@ -4844,7 +4844,6 @@ int32_t lsm6dsv_sigmot_mode_get(stmdev_ctx_t *ctx, uint8_t *val);
 typedef struct
 {
   uint8_t step_counter_enable  : 1;
-  uint8_t false_step_rej       : 1;
 } lsm6dsv_stpcnt_mode_t;
 int32_t lsm6dsv_stpcnt_mode_set(stmdev_ctx_t *ctx,
                                 lsm6dsv_stpcnt_mode_t val);
