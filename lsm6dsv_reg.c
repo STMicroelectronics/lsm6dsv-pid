@@ -2083,9 +2083,7 @@ int32_t lsm6dsv_all_sources_get(stmdev_ctx_t *ctx, lsm6dsv_all_sources_t *val)
   val->step_detector = emb_func_src.step_detected;
 
   /* sensor hub */
-  ret = lsm6dsv_mem_bank_set(ctx, LSM6DSV_SENSOR_HUB_MEM_BANK);
-  ret += lsm6dsv_read_reg(ctx, LSM6DSV_STATUS_MASTER, (uint8_t *)&status_shub, 1);
-  ret += lsm6dsv_mem_bank_set(ctx, LSM6DSV_MAIN_MEM_BANK);
+  ret = lsm6dsv_read_reg(ctx, LSM6DSV_STATUS_MASTER_MAINPAGE, (uint8_t *)&status_shub, 1);
   if (ret != 0) { return ret; }
 
   val->sh_endop = status_shub.sens_hub_endop;
