@@ -42,8 +42,8 @@ This directory contains the LSM6DSV component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section1" aria-hidden="true">
-<label for="collapse-section1" aria-hidden="true">V1.0.1 / 19-Apr-2023</label>
+<input type="checkbox" id="collapse-section2" aria-hidden="true">
+<label for="collapse-section2" aria-hidden="true">V1.0.1 / 19-Apr-2023</label>
 <div>
 
 ## Main changes
@@ -55,8 +55,8 @@ This directory contains the LSM6DSV component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
-<label for="collapse-section1" aria-hidden="true">V1.1.0 / 18-May-2023</label>
+<input type="checkbox" id="collapse-section3" aria-hidden="true">
+<label for="collapse-section3" aria-hidden="true">V1.1.0 / 18-May-2023</label>
 <div>
 
 ## Main changes
@@ -67,6 +67,20 @@ This directory contains the LSM6DSV component drivers.
 - sensor_hub: change sh_read_data_raw_get() API signature
 - lsm6dsv_reg.c: review read/write reg ret value checks
 - lsm6dsv_STdC: Align to DS V3.0
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section4" checked aria-hidden="true">
+<label for="collapse-section4" aria-hidden="true">V1.2.0 / 23-May-2023</label>
+<div>
+
+## Main changes
+
+- Use a single lsm6dsv_sh_slv_cfg_read() API for all targets
+- Use a single lsm6dsv_fifo_sh_batch_slave_xxx() API for all targets
+- Fix MISRA errors
 
 ##
 
