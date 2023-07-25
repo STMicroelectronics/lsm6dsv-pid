@@ -72,7 +72,7 @@ This directory contains the LSM6DSV component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section4" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section4" aria-hidden="true">
 <label for="collapse-section4" aria-hidden="true">V1.2.0 / 23-May-2023</label>
 <div>
 
@@ -81,6 +81,18 @@ This directory contains the LSM6DSV component drivers.
 - Use a single lsm6dsv_sh_slv_cfg_read() API for all targets
 - Use a single lsm6dsv_fifo_sh_batch_slave_xxx() API for all targets
 - Fix MISRA errors
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
+<label for="collapse-section5" aria-hidden="true">V1.2.1 / 25-July-2023</label>
+<div>
+
+## Main changes
+
+- Fix gyro FS 4000dps value typo error
 
 ##
 
