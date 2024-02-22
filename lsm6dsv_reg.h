@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2022 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -2941,11 +2941,6 @@ typedef struct
 #endif /* DRV_BYTE_ORDER */
 } lsm6dsv_pedo_sc_deltat_h_t;
 
-/**
-  * @}
-  *
-  */
-
 /** @defgroup bitfields page pg2_emb_adv
   * @{
   *
@@ -3966,6 +3961,7 @@ typedef struct
   uint8_t drdy_xl              : 1;
   uint8_t drdy_g               : 1;
   uint8_t drdy_g_eis           : 1;
+  uint8_t drdy_temp            : 1;
   uint8_t fifo_th              : 1;
   uint8_t fifo_ovr             : 1;
   uint8_t fifo_full            : 1;
@@ -4047,9 +4043,9 @@ typedef struct
   uint8_t den_z                : 1;
   enum
   {
-    LSM6DSV_DEN_NOT_DEFINED = 0x00,
-    LSM6DSV_LEVEL_TRIGGER   = 0x02,
-    LSM6DSV_LEVEL_LATCHED   = 0x03,
+    DEN_NOT_DEFINED = 0x00,
+    LEVEL_TRIGGER   = 0x02,
+    LEVEL_LATCHED   = 0x03,
   } mode;
 } lsm6dsv_den_conf_t;
 int32_t lsm6dsv_den_conf_set(const stmdev_ctx_t *ctx, lsm6dsv_den_conf_t val);
