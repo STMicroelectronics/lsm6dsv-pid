@@ -4273,9 +4273,9 @@ typedef struct
   uint8_t gbias                : 1;
 } lsm6dsv_fifo_sflp_raw_t;
 int32_t lsm6dsv_fifo_sflp_batch_set(const stmdev_ctx_t *ctx,
-                                       lsm6dsv_fifo_sflp_raw_t val);
+                                    lsm6dsv_fifo_sflp_raw_t val);
 int32_t lsm6dsv_fifo_sflp_batch_get(const stmdev_ctx_t *ctx,
-                                       lsm6dsv_fifo_sflp_raw_t *val);
+                                    lsm6dsv_fifo_sflp_raw_t *val);
 
 typedef enum
 {
@@ -4766,7 +4766,7 @@ typedef struct
   uint8_t   slv_len;
 } lsm6dsv_sh_cfg_read_t;
 int32_t lsm6dsv_sh_slv_cfg_read(const stmdev_ctx_t *ctx, uint8_t idx,
-                                   lsm6dsv_sh_cfg_read_t *val);
+                                lsm6dsv_sh_cfg_read_t *val);
 
 int32_t lsm6dsv_sh_status_get(const stmdev_ctx_t *ctx,
                               lsm6dsv_status_master_t *val);
@@ -4837,7 +4837,7 @@ typedef struct
   float_t gbias_z; /* dps */
 } lsm6dsv_sflp_gbias_t;
 int32_t lsm6dsv_sflp_game_gbias_set(const stmdev_ctx_t *ctx,
-                                       lsm6dsv_sflp_gbias_t *val);
+                                    lsm6dsv_sflp_gbias_t *val);
 
 typedef enum
 {
@@ -4849,9 +4849,9 @@ typedef enum
   LSM6DSV_SFLP_480Hz = 0x5,
 } lsm6dsv_sflp_data_rate_t;
 int32_t lsm6dsv_sflp_data_rate_set(const stmdev_ctx_t *ctx,
-                                      lsm6dsv_sflp_data_rate_t val);
+                                   lsm6dsv_sflp_data_rate_t val);
 int32_t lsm6dsv_sflp_data_rate_get(const stmdev_ctx_t *ctx,
-                                      lsm6dsv_sflp_data_rate_t *val);
+                                   lsm6dsv_sflp_data_rate_t *val);
 
 typedef struct
 {
