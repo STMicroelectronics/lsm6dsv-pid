@@ -113,13 +113,27 @@ This directory contains the LSM6DSV component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section7" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section7" aria-hidden="true">
 <label for="collapse-section7" aria-hidden="true">V2.0.1 / 02-May-2024</label>
 <div>
 
 ## Main changes
 
 - Fix BDR counter regsters get/set APIs
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section8" checked aria-hidden="true">
+<label for="collapse-section8" aria-hidden="true">V2.1.0 / 22-May-2024</label>
+<div>
+
+## Main changes
+
+- updated README.md file with tag reference and mdelay description
+- Add i3c_int_en set/get APIs
+- Fix enum mode macros in den_conf_t struct
 
 ##
 
