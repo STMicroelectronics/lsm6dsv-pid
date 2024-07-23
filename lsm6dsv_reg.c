@@ -1993,7 +1993,7 @@ int32_t lsm6dsv_pin_int1_route_get(const stmdev_ctx_t *ctx,
   * @brief   Select the signal that need to route on int2 pad[set]
   *
   * @param  ctx    Read / write interface definitions.(ptr)
-  * @param  val    the signals to route on int1 pin.
+  * @param  val    the signals to route on int2 pin.
   * @retval        Interface status (MANDATORY: return 0 -> no Error).
   *
   */
@@ -2058,7 +2058,7 @@ int32_t lsm6dsv_pin_int2_route_set(const stmdev_ctx_t *ctx,
   * @brief  Select the signal that need to route on int2 pad.[get]
   *
   * @param  ctx    Read / write interface definitions.(ptr)
-  * @param  val    the signals that are routed on int1 pin.(ptr)
+  * @param  val    the signals that are routed on int2 pin.(ptr)
   * @retval        Interface status (MANDATORY: return 0 -> no Error).
   *
   */
