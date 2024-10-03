@@ -139,13 +139,25 @@ This directory contains the LSM6DSV component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section9" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section9" aria-hidden="true">
 <label for="collapse-section9" aria-hidden="true">V3.0.0 / 22-Jun-2024</label>
 <div>
 
 ## Main changes
 
 - Add defs for num_phy routines
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section10" checked aria-hidden="true">
+<label for="collapse-section10" aria-hidden="true">V3.0.1 / 03-Oct-2024</label>
+<div>
+
+## Main changes
+
+- Fix typos in two APIs description
 
 ##
 
