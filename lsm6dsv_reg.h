@@ -4286,37 +4286,40 @@ typedef struct
   uint32_t timestamp;
 } lsm6dsv_fifo_step_counter;
 
+typedef enum
+{
+  LSM6DSV_FIFO_EMPTY                    = 0x0,
+  LSM6DSV_GY_NC_TAG                     = 0x1,
+  LSM6DSV_XL_NC_TAG                     = 0x2,
+  LSM6DSV_TEMPERATURE_TAG               = 0x3,
+  LSM6DSV_TIMESTAMP_TAG                 = 0x4,
+  LSM6DSV_CFG_CHANGE_TAG                = 0x5,
+  LSM6DSV_XL_NC_T_2_TAG                 = 0x6,
+  LSM6DSV_XL_NC_T_1_TAG                 = 0x7,
+  LSM6DSV_XL_2XC_TAG                    = 0x8,
+  LSM6DSV_XL_3XC_TAG                    = 0x9,
+  LSM6DSV_GY_NC_T_2_TAG                 = 0xA,
+  LSM6DSV_GY_NC_T_1_TAG                 = 0xB,
+  LSM6DSV_GY_2XC_TAG                    = 0xC,
+  LSM6DSV_GY_3XC_TAG                    = 0xD,
+  LSM6DSV_SENSORHUB_SLAVE0_TAG          = 0xE,
+  LSM6DSV_SENSORHUB_SLAVE1_TAG          = 0xF,
+  LSM6DSV_SENSORHUB_SLAVE2_TAG          = 0x10,
+  LSM6DSV_SENSORHUB_SLAVE3_TAG          = 0x11,
+  LSM6DSV_STEP_COUNTER_TAG              = 0x12,
+  LSM6DSV_SFLP_GAME_ROTATION_VECTOR_TAG = 0x13,
+  LSM6DSV_SFLP_GYROSCOPE_BIAS_TAG       = 0x16,
+  LSM6DSV_SFLP_GRAVITY_VECTOR_TAG       = 0x17,
+  LSM6DSV_SENSORHUB_NACK_TAG            = 0x19,
+  LSM6DSV_XL_DUAL_CORE                  = 0x1D,
+  LSM6DSV_GY_ENHANCED_EIS               = 0x1E,
+} lsm6dsv_fifo_tag;
+
 typedef struct
 {
-  enum
-  {
-    LSM6DSV_FIFO_EMPTY                    = 0x0,
-    LSM6DSV_GY_NC_TAG                     = 0x1,
-    LSM6DSV_XL_NC_TAG                     = 0x2,
-    LSM6DSV_TEMPERATURE_TAG               = 0x3,
-    LSM6DSV_TIMESTAMP_TAG                 = 0x4,
-    LSM6DSV_CFG_CHANGE_TAG                = 0x5,
-    LSM6DSV_XL_NC_T_2_TAG                 = 0x6,
-    LSM6DSV_XL_NC_T_1_TAG                 = 0x7,
-    LSM6DSV_XL_2XC_TAG                    = 0x8,
-    LSM6DSV_XL_3XC_TAG                    = 0x9,
-    LSM6DSV_GY_NC_T_2_TAG                 = 0xA,
-    LSM6DSV_GY_NC_T_1_TAG                 = 0xB,
-    LSM6DSV_GY_2XC_TAG                    = 0xC,
-    LSM6DSV_GY_3XC_TAG                    = 0xD,
-    LSM6DSV_SENSORHUB_SLAVE0_TAG          = 0xE,
-    LSM6DSV_SENSORHUB_SLAVE1_TAG          = 0xF,
-    LSM6DSV_SENSORHUB_SLAVE2_TAG          = 0x10,
-    LSM6DSV_SENSORHUB_SLAVE3_TAG          = 0x11,
-    LSM6DSV_STEP_COUNTER_TAG              = 0x12,
-    LSM6DSV_SFLP_GAME_ROTATION_VECTOR_TAG = 0x13,
-    LSM6DSV_SFLP_GYROSCOPE_BIAS_TAG       = 0x16,
-    LSM6DSV_SFLP_GRAVITY_VECTOR_TAG       = 0x17,
-    LSM6DSV_SENSORHUB_NACK_TAG            = 0x19,
-    LSM6DSV_XL_DUAL_CORE                  = 0x1D,
-    LSM6DSV_GY_ENHANCED_EIS               = 0x1E,
-  } tag;
-  uint8_t cnt : 2;
+  uint8_t tag  : 5;
+  uint8_t cnt  : 2;
+  uint8_t rsvd : 1;
   uint8_t data[6];
 } lsm6dsv_fifo_out_raw_t;
 int32_t lsm6dsv_fifo_out_raw_get(const stmdev_ctx_t *ctx,
