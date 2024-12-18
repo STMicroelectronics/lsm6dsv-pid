@@ -3686,6 +3686,8 @@ float_t lsm6dsv_from_lsb_to_celsius(int16_t lsb);
 
 float_t lsm6dsv_from_lsb_to_nsec(uint32_t lsb);
 
+uint32_t lsm6dsv_from_f16_to_f32(uint16_t val);
+
 int32_t lsm6dsv_xl_offset_on_out_set(const stmdev_ctx_t *ctx, uint8_t val);
 int32_t lsm6dsv_xl_offset_on_out_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
