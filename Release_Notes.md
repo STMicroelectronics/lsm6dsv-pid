@@ -30,174 +30,25 @@ This directory contains the LSM6DSV component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section1" aria-hidden="true">
-<label for="collapse-section1" aria-hidden="true">V1.0.0 / 05-Dic-2022</label>
+<input type="checkbox" id="collapse-section16" checked aria-hidden="true">
+<label for="collapse-section16" aria-hidden="true">V5.0.1 / 19-Nov-2025</label>
 <div>
 
 ## Main changes
 
-- First official release [ref. DS v2.0]
+- (fix) do not jump to exit before initing master_config
 
 ##
 
 </div>
-
-<input type="checkbox" id="collapse-section2" aria-hidden="true">
-<label for="collapse-section2" aria-hidden="true">V1.0.1 / 19-Apr-2023</label>
+<input type="checkbox" id="collapse-section15" aria-hidden="true">
+<label for="collapse-section15" aria-hidden="true">V5.0.0 / 05-Nov-2025</label>
 <div>
 
 ## Main changes
 
-- Fix enum values names
-- Add __weak directive to read/write registers routines
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section3" aria-hidden="true">
-<label for="collapse-section3" aria-hidden="true">V1.1.0 / 18-May-2023</label>
-<div>
-
-## Main changes
-
-- read sh status from mainpage
-- sensor_hub: change fifo_batch_sh_slave_xxx() API name
-- sensor_hub: add sh_status_get() API
-- sensor_hub: change sh_read_data_raw_get() API signature
-- lsm6dsv_reg.c: review read/write reg ret value checks
-- lsm6dsv_STdC: Align to DS V3.0
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section4" aria-hidden="true">
-<label for="collapse-section4" aria-hidden="true">V1.2.0 / 23-May-2023</label>
-<div>
-
-## Main changes
-
-- Use a single lsm6dsv_sh_slv_cfg_read() API for all targets
-- Use a single lsm6dsv_fifo_sh_batch_slave_xxx() API for all targets
-- Fix MISRA errors
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section5" aria-hidden="true">
-<label for="collapse-section5" aria-hidden="true">V1.2.1 / 25-July-2023</label>
-<div>
-
-## Main changes
-
-- Fix gyro FS 4000dps value typo error
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section6" aria-hidden="true">
-<label for="collapse-section6" aria-hidden="true">V2.0.0 / 20-Mar-2024</label>
-<div>
-
-## Main changes
-
-- Fixed code style (Artistic Style Version 3.4.13)
-- Align to lsm6dsv16x driver in term of style and bug fixing
-- Fix code style
-- Add "const" to ctx arg for all APIs
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section7" aria-hidden="true">
-<label for="collapse-section7" aria-hidden="true">V2.0.1 / 02-May-2024</label>
-<div>
-
-## Main changes
-
-- Fix BDR counter regsters get/set APIs
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section8" aria-hidden="true">
-<label for="collapse-section8" aria-hidden="true">V2.1.0 / 22-May-2024</label>
-<div>
-
-## Main changes
-
-- updated README.md file with tag reference and mdelay description
-- Add i3c_int_en set/get APIs
-- Fix enum mode macros in den_conf_t struct
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section9" aria-hidden="true">
-<label for="collapse-section9" aria-hidden="true">V3.0.0 / 22-Jun-2024</label>
-<div>
-
-## Main changes
-
-- Add defs for num_phy routines
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section10" aria-hidden="true">
-<label for="collapse-section10" aria-hidden="true">V3.0.1 / 03-Oct-2024</label>
-<div>
-
-## Main changes
-
-- Fix typos in two APIs description
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section11" aria-hidden="true">
-<label for="collapse-section11" aria-hidden="true">V3.2.0 / 03-Oct-2024</label>
-<div>
-
-## Main changes
-
-- added struct types to help parsing FIFO data
-- Complete APIs for handling embedded functions
-- simplify efficiently the fifo_read API
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section12" aria-hidden="true">
-<label for="collapse-section12" aria-hidden="true">V3.3.0 / 18-Dec-2024</label>
-<div>
-
-## Main changes
-
-- Move fifo_tag out of struct fifo_out_raw
-- Add API to transform float16 to float32
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section13" aria-hidden="true">
-<label for="collapse-section13" aria-hidden="true">V3.4.0 / 07-Jul-2025</label>
-<div>
-
-## Main changes
-
-- Fix driver formatting options
-- Added pointer to private data in stmdev_ctx_t
+- split reset into 3 routines (reboot, sw_por, reset)
+- (FIX) move memset in pin_int2_route_get() API
 
 ##
 
@@ -220,30 +71,179 @@ This directory contains the LSM6DSV component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section15" aria-hidden="true">
-<label for="collapse-section15" aria-hidden="true">V5.0.0 / 05-Nov-2025</label>
+<input type="checkbox" id="collapse-section13" aria-hidden="true">
+<label for="collapse-section13" aria-hidden="true">V3.4.0 / 07-Jul-2025</label>
 <div>
 
 ## Main changes
 
-- split reset into 3 routines (reboot, sw_por, reset)
-- (FIX) move memset in pin_int2_route_get() API
+- Fix driver formatting options
+- Added pointer to private data in stmdev_ctx_t
 
 ##
 
 </div>
 
-<input type="checkbox" id="collapse-section16" checked aria-hidden="true">
-<label for="collapse-section16" aria-hidden="true">V5.0.1 / 19-Nov-2025</label>
+<input type="checkbox" id="collapse-section12" aria-hidden="true">
+<label for="collapse-section12" aria-hidden="true">V3.3.0 / 18-Dec-2024</label>
 <div>
 
 ## Main changes
 
-- (fix) do not jump to exit before initing master_config
+- Move fifo_tag out of struct fifo_out_raw
+- Add API to transform float16 to float32
 
 ##
 
 </div>
+
+<input type="checkbox" id="collapse-section11" aria-hidden="true">
+<label for="collapse-section11" aria-hidden="true">V3.2.0 / 03-Oct-2024</label>
+<div>
+
+## Main changes
+
+- added struct types to help parsing FIFO data
+- Complete APIs for handling embedded functions
+- simplify efficiently the fifo_read API
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section10" aria-hidden="true">
+<label for="collapse-section10" aria-hidden="true">V3.0.1 / 03-Oct-2024</label>
+<div>
+
+## Main changes
+
+- Fix typos in two APIs description
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section9" aria-hidden="true">
+<label for="collapse-section9" aria-hidden="true">V3.0.0 / 22-Jun-2024</label>
+<div>
+
+## Main changes
+
+- Add defs for num_phy routines
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section8" aria-hidden="true">
+<label for="collapse-section8" aria-hidden="true">V2.1.0 / 22-May-2024</label>
+<div>
+
+## Main changes
+
+- updated README.md file with tag reference and mdelay description
+- Add i3c_int_en set/get APIs
+- Fix enum mode macros in den_conf_t struct
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section7" aria-hidden="true">
+<label for="collapse-section7" aria-hidden="true">V2.0.1 / 02-May-2024</label>
+<div>
+
+## Main changes
+
+- Fix BDR counter regsters get/set APIs
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section6" aria-hidden="true">
+<label for="collapse-section6" aria-hidden="true">V2.0.0 / 20-Mar-2024</label>
+<div>
+
+## Main changes
+
+- Fixed code style (Artistic Style Version 3.4.13)
+- Align to lsm6dsv16x driver in term of style and bug fixing
+- Fix code style
+- Add "const" to ctx arg for all APIs
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section5" aria-hidden="true">
+<label for="collapse-section5" aria-hidden="true">V1.2.1 / 25-July-2023</label>
+<div>
+
+## Main changes
+
+- Fix gyro FS 4000dps value typo error
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section4" aria-hidden="true">
+<label for="collapse-section4" aria-hidden="true">V1.2.0 / 23-May-2023</label>
+<div>
+
+## Main changes
+
+- Use a single lsm6dsv_sh_slv_cfg_read() API for all targets
+- Use a single lsm6dsv_fifo_sh_batch_slave_xxx() API for all targets
+- Fix MISRA errors
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section3" aria-hidden="true">
+<label for="collapse-section3" aria-hidden="true">V1.1.0 / 18-May-2023</label>
+<div>
+
+## Main changes
+
+- read sh status from mainpage
+- sensor_hub: change fifo_batch_sh_slave_xxx() API name
+- sensor_hub: add sh_status_get() API
+- sensor_hub: change sh_read_data_raw_get() API signature
+- lsm6dsv_reg.c: review read/write reg ret value checks
+- lsm6dsv_STdC: Align to DS V3.0
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section2" aria-hidden="true">
+<label for="collapse-section2" aria-hidden="true">V1.0.1 / 19-Apr-2023</label>
+<div>
+
+## Main changes
+
+- Fix enum values names
+- Add __weak directive to read/write registers routines
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section1" aria-hidden="true">
+<label for="collapse-section1" aria-hidden="true">V1.0.0 / 05-Dic-2022</label>
+<div>
+
+## Main changes
+
+- First official release [ref. DS v2.0]
+
+##
+
+</div>
+
 :::
 
 :::
