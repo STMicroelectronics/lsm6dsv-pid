@@ -7464,7 +7464,7 @@ typedef struct
   *
   */
 int32_t lsm6dsv_sflp_game_gbias_set(const stmdev_ctx_t *ctx,
-                                    lsm6dsv_sflp_gbias_t *val);
+                                    const lsm6dsv_sflp_gbias_t *val);
 
 typedef enum
 {
@@ -7838,7 +7838,7 @@ typedef struct
   *
   */
 int32_t lsm6dsv_act_thresholds_set(const stmdev_ctx_t *ctx,
-                                   lsm6dsv_act_thresholds_t *val);
+                                   const lsm6dsv_act_thresholds_t *val);
 /**
   * @brief  Wakeup and activity/inactivity threshold.[get]
   *
