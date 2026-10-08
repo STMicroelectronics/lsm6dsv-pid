@@ -30,7 +30,24 @@ This directory contains the LSM6DSV component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section18" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section19" checked aria-hidden="true">
+<label for="collapse-section19" aria-hidden="true">V5.2.0 / 08-Oct-2026</label>
+<div>
+
+## Main changes
+
+- Fix EXT_FORMAT register (embedded adv page 2)
+- Introduce from_f32_to_f16() API
+- Add xl_dualc_batch_from_if bits and routines
+- Fix some MISRA issues
+- Fix tag in fifo_out_raw_get API
+- Fix some MISRA issues
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section18" aria-hidden="true">
 <label for="collapse-section18" aria-hidden="true">V5.1.1 / 18-Mar-2026</label>
 <div>
 
